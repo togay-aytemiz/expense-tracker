@@ -2,7 +2,7 @@ import moment from "moment";
 
 const HistoryItem = ({ transaction }) => {
   const { type, text, amount, time, id } = transaction;
-  const borderColor = type === "income" ? true : false;
+  const borderColor = type === "income" ? false : true;
 
   return (
     <div
