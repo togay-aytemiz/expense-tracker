@@ -68,7 +68,7 @@ const AddNewTransaction = ({ onCreate }) => {
         {amount && text && (
           <button
             onClick={handleClick}
-            className="p-3 w-full rounded-md shadow-sm text-white bg-purple-500 hover:bg-purple-900 hover:shadow-2xl"
+            className="p-3 w-full rounded-md shadow-sm text-white bg-purple-500 hover:bg-purple-900 hover:shadow-2xl transition ease-out"
           >
             Add Transaction
           </button>

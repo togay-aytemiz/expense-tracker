@@ -11,6 +11,7 @@ const History = ({ transactions }) => {
       <div className="flex flex-col gap-3">
         {/* history details */}
 
+        {transactions.length === 0 && <p>There is no transaction history</p>}
         {transactions.map((transaction) => {
           return <HistoryItem transaction={transaction} />;
         })}
