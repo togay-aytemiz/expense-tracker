@@ -1,16 +1,21 @@
-const History = () => {
-  return (
-    <div className="my-10 flex flex-col gap-5">
-        <div className="flex flex-col gap-2">
-            <div className="font-semibold">History</div>
-            <div className="w-full h-[1px] bg-slate-400"></div>
-        </div>
-        
+import HistoryItem from "./HistoryItem";
 
-        <div className="flex flex-col gap-6">
-            {/* history details */}
-        </div>
+const History = ({ transactions }) => {
+  return (
+    <div className="my-10 flex flex-col gap-4">
+      <div className="flex flex-col gap-2">
+        <div className="font-semibold">History</div>
+        <div className="w-full h-[1px] bg-slate-400"></div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        {/* history details */}
+
+        {transactions.map((transaction) => {
+          return <HistoryItem transaction={transaction} />;
+        })}
+      </div>
     </div>
-  )
-}
-export default History
+  );
+};
+export default History;
