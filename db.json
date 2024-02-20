@@ -1,0 +1,11 @@
+{
+  "transactions": [
+    {
+      "id": "dcf1",
+      "text": "test",
+      "amount": 120,
+      "time": "2024-02-20T15:45:49.873Z",
+      "type": "income"
+    }
+  ]
+}

@@ -1,69 +1,67 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AddNewTransaction from "./AddNewTransaction";
 import Header from "./Header";
 import History from "./History";
 import IncomeSummary from "./IncomeSummary";
 import YourBalance from "./YourBalance";
-
-const mockData = [
-  {
-    id: 1,
-    text: "Grocery shopping",
-    amount: -50.25,
-    time: "2024-02-19T08:30:00",
-    type: "expense",
-  },
-  {
-    id: 2,
-    text: "Salary",
-    amount: 2000.0,
-    time: "2024-02-15T12:00:00",
-    type: "income",
-  },
-  {
-    id: 3,
-    text: "Gas bill",
-    amount: -30.0,
-    time: "2024-02-10T10:45:00",
-    type: "expense",
-  },
-  {
-    id: 4,
-    text: "Freelance work",
-    amount: 500.0,
-    time: "2024-02-05T16:20:00",
-    type: "income",
-  },
-  {
-    id: 5,
-    text: "Dinner with friends",
-    amount: -80.0,
-    time: "2024-02-02T19:00:00",
-    type: "expense",
-  },
-];
+import axios from "axios";
 
 const App = () => {
-  const [transactions, setTransactions] = useState(mockData);
+  const [transactions, setTransactions] = useState([]);
 
-  const handleCreate = (text, amount, time) => {
+  const fetchTransactions = async () => {
+    const response = await axios.get("http://localhost:3001/transactions");
+    console.log(response.data);
+    let sortedData = response.data.sort(
+      (a, b) => new Date(b.time) - new Date(a.time)
+    );
+    setTransactions(sortedData);
+  };
+
+  useEffect(() => {
+    fetchTransactions();
+  }, []);
+
+  const handleCreate = async (text, amount, time) => {
     console.log(
       `Creating transaction with text: ${text}, amount: ${amount} and time: ${time}`
     );
 
-    const updatedTransaction = [
-      ...transactions,
-      {
-        id: crypto.randomUUID(),
-        text,
-        amount,
-        time,
-        type: amount >= 0 ? "income" : "expense",
-      },
-    ].sort((a, b) => new Date(b.time) - new Date(a.time));
+    let type = amount >= 0 ? "income" : "expense";
+
+    const response = await axios.post("http://localhost:3001/transactions", {
+      text,
+      amount,
+      time,
+      type,
+    });
+    console.log(response.data);
+
+    const updatedTransaction = [...transactions, response.data].sort(
+      (a, b) => new Date(b.time) - new Date(a.time)
+    );
 
     console.log(updatedTransaction);
     setTransactions(updatedTransaction);
+  };
+
+  const handleDelete = async (id) => {
+    await axios.delete(`http://localhost:3001/transactions/${id}`);
+
+    const updatedTransaction = transactions.filter((transaction) => {
+      return transaction.id !== id;
+    });
+    setTransactions(updatedTransaction);
+  };
+
+  const handleDeleteAll = async () => {
+    transactions.map(async (transaction) => {
+      return await axios.delete(
+        `http://localhost:3001/transactions/${transaction.id}`
+      );
+    });
+
+    setTransactions([]);
   };
 
   return (
@@ -74,7 +72,11 @@ const App = () => {
           <YourBalance transactions={transactions} />
           <IncomeSummary transactions={transactions} />
           <AddNewTransaction onCreate={handleCreate} />
-          <History transactions={transactions} />
+          <History
+            transactions={transactions}
+            onDelete={handleDelete}
+            onDeleteAll={handleDeleteAll}
+          />
         </div>
       </div>
     </>

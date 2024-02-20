@@ -5,10 +5,12 @@ const AddNewTransaction = ({ onCreate }) => {
   const [text, setText] = useState("");
 
   const handleClick = () => {
-    const timestamp = new Date().toISOString();
-    onCreate(text, parseFloat(amount), timestamp);
-    setAmount("");
-    setText("");
+    if (amount && text) {
+      const timestamp = new Date().toISOString();
+      onCreate(text, parseFloat(amount), timestamp);
+      setAmount("");
+      setText("");
+    }
   };
 
   return (
@@ -65,14 +67,21 @@ const AddNewTransaction = ({ onCreate }) => {
         </div>
 
         {/* Button */}
-        {amount && text && (
+        {/* {amount && text && (
           <button
             onClick={handleClick}
             className="p-3 w-full rounded-md shadow-sm text-white bg-purple-500 hover:bg-purple-900 hover:shadow-2xl transition ease-out"
           >
             Add Transaction
           </button>
-        )}
+        )} */}
+
+        <button
+          onClick={handleClick}
+          className="p-3 w-full rounded-md shadow-sm text-white bg-purple-500 hover:bg-purple-900 hover:shadow-2xl transition ease-out"
+        >
+          Add Transaction
+        </button>
       </div>
     </div>
   );
