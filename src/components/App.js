@@ -29,7 +29,7 @@ const App = () => {
 
     let type = amount >= 0 ? "income" : "expense";
 
-    const response = await axios.post("http://10.0.2.2:3001/transactions", {
+    const response = await axios.post("http://127.0.0.1:3001/transactions", {
       text,
       amount,
       time,
@@ -46,7 +46,7 @@ const App = () => {
   };
 
   const handleDelete = async (id) => {
-    await axios.delete(`http://10.0.2.2:3001/transactions/${id}`);
+    await axios.delete(`http://127.0.0.1:3001/transactions/${id}`);
 
     const updatedTransaction = transactions.filter((transaction) => {
       return transaction.id !== id;
@@ -57,7 +57,7 @@ const App = () => {
   const handleDeleteAll = async () => {
     transactions.map(async (transaction) => {
       return await axios.delete(
-        `http://10.0.2.2:3001/transactions/${transaction.id}`
+        `http://127.0.0.1:3001/transactions/${transaction.id}`
       );
     });
 
